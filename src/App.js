@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import Layout from './components/Layout/Layout'
+import Home from './components/Home/Home'
+import Register from './components/Register/Register'
+import Login from './components/Login/Login'
+import Notfound from './components/Notfound/Notfound'
+import Product from './components/Product/Product'
+import jwtDecode from 'jwt-decode'
+import Prodected from './components/Prodected/Prodected'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+ export default function App() {
+
+
+let [user, setUser] = useState(null)
+function getUser() {
+  let token = localStorage.getItem('token')
+  let usr = jwtDecode(token)
+  setUser(usr)
 }
-
-export default App;
+useEffect(()=>{
+  if(localStorage.getItem('token')){
+    getUser()
+  }
+},[])
+let routers = createBrowserRouter([
+  {
+    path: '', element: <Layout user={user} setUser={setUser} />, children: [
+      { index: true, element: <Home /> },
+      { path: 'register', element: <Register /> },
+      { path: 'login', element: <Login getUser={getUser} /> },
+      { path: 'product', element:<Prodected><Product /></Prodected>  },
+      { path: '*', element: <Notfound /> },
+    ]
+  }
+])
+  return (
+    <RouterProvider router={routers} ></RouterProvider>
+  )
+}

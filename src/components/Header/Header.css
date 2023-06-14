@@ -1,0 +1,5 @@
+.header{
+    background-image:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(../../../public/assets/img/3d-world-news-background-loop-free-video.jpg);
+background-size: cover;
+background-repeat: no-repeat;
+}
